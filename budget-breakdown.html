@@ -45,32 +45,32 @@
                 <div class="budget-content">
                     <!-- Editorial Intro -->
                     <div class="budget-editorial">
-                        <span class="budget-label">BUDGET</span>
-                        <h1 class="budget-heading">Where your budget goes.</h1>
+                        <span class="budget-label">BUDGET BREAKDOWN</span>
+                        <h1 class="budget-heading">Understanding Your Travel Investment</h1>
                         <p class="budget-subtext">
-                            Travel, thoughtfully accounted for.
+                            A detailed analysis of your planned expenses.
                         </p>
                     </div>
 
                     <!-- Budget Overview -->
                     <div class="budget-overview">
                         <div class="budget-item">
-                            <span class="budget-label">PLANNED BUDGET</span>
-                            <span class="budget-value" id="planned-budget">₹80,000</span>
+                            <span class="budget-label">TOTAL BUDGET</span>
+                            <span class="budget-value" id="total-budget">₹80,000</span>
                         </div>
                         <div class="budget-item">
-                            <span class="budget-label">ESTIMATED SPEND</span>
-                            <span class="budget-value" id="estimated-spend">₹0</span>
+                            <span class="budget-label">PLANNED EXPENSES</span>
+                            <span class="budget-value" id="planned-expenses">₹0</span>
                         </div>
                         <div class="budget-item">
-                            <span class="budget-label">REMAINING</span>
-                            <span class="budget-value" id="remaining-budget">₹80,000</span>
+                            <span class="budget-label">AVAILABLE FUNDS</span>
+                            <span class="budget-value" id="available-funds">₹80,000</span>
                         </div>
                     </div>
 
                     <!-- Budget Progress -->
                     <div class="budget-progress">
-                        <div class="progress-label">BUDGET USED</span>
+                        <div class="progress-label">BUDGET UTILIZATION</div>
                         <div class="progress-bar">
                             <div class="progress-fill" id="progress-fill"></div>
                         </div>
@@ -79,13 +79,13 @@
 
                     <!-- Chart Container -->
                     <div class="chart-container">
-                        <div class="chart-title">Expense Categories</span>
+                        <div class="chart-title">EXPENSE BREAKDOWN BY CATEGORY</div>
                         <div class="chart" id="expense-chart"></div>
                     </div>
 
                     <!-- Category Breakdown -->
                     <div class="category-breakdown">
-                        <h2 class="section-heading">Category Breakdown</h2>
+                        <h2 class="section-heading">CATEGORY BREAKDOWN</h2>
                         <div class="category-list" id="category-list">
                             <!-- Category items will be inserted here -->
                         </div>
@@ -93,15 +93,15 @@
 
                     <!-- City Breakdown (optional) -->
                     <div class="city-breakdown">
-                        <h2 class="section-heading">City Breakdown</h2>
-                        <div class="city-list" id="city-list">
+                        <h2 class="section-heading">DESTINATION BREAKDOWN</h2>
+                        <div class="category-list" id="city-list">
                             <!-- City items will be inserted here -->
                         </div>
                     </div>
 
                     <!-- Trip Insight -->
                     <div class="trip-insight">
-                        <h2 class="section-heading">Trip Insight</h2>
+                        <h2 class="section-heading">TRAVEL INSIGHTS</h2>
                         <p class="insight-text" id="insight-text"></p>
                     </div>
 
@@ -193,33 +193,33 @@
             }
 
             const budget = journey.budget || 0;
-            const remainingBudget = budget - totalEstimatedCost;
-            const budgetUsedPercentage = budget > 0 ? (totalEstimatedCost / budget) * 100 : 0;
+            const availableFunds = budget - totalEstimatedCost;
+            const budgetUtilizationPercentage = budget > 0 ? (totalEstimatedCost / budget) * 100 : 0;
 
             // Update budget overview
-            document.getElementById('planned-budget').textContent = `₹${budget.toLocaleString()}`;
-            document.getElementById('estimated-spend').textContent = `₹${totalEstimatedCost.toLocaleString()}`;
-            const remainingEl = document.getElementById('remaining-budget');
-            if (remainingBudget < 0) {
-                remainingEl.textContent = `-₹${Math.abs(remainingBudget).toLocaleString()}`;
-                remainingEl.classList.add('over-budget');
+            document.getElementById('total-budget').textContent = `₹${budget.toLocaleString()}`;
+            document.getElementById('planned-expenses').textContent = `₹${totalEstimatedCost.toLocaleString()}`;
+            const availableFundsEl = document.getElementById('available-funds');
+            if (availableFunds < 0) {
+                availableFundsEl.textContent = `-₹${Math.abs(availableFunds).toLocaleString()}`;
+                availableFundsEl.classList.add('over-budget');
             } else {
-                remainingEl.textContent = `₹${remainingBudget.toLocaleString()}`;
-                remainingEl.classList.remove('over-budget');
+                availableFundsEl.textContent = `₹${availableFunds.toLocaleString()}`;
+                availableFundsEl.classList.remove('over-budget');
             }
 
             // Update budget progress
             const progressFill = document.getElementById('progress-fill');
             const progressPercentage = document.getElementById('progress-percentage');
-            progressFill.style.width = `${budgetUsedPercentage}%`;
-            progressPercentage.textContent = `${Math.round(budgetUsedPercentage)}%`;
+            progressFill.style.width = `${budgetUtilizationPercentage}%`;
+            progressPercentage.textContent = `${Math.round(budgetUtilizationPercentage)}%`;
 
-            if (budgetUsedPercentage >= 100) {
+            if (budgetUtilizationPercentage >= 100) {
                 progressFill.style.backgroundColor = '#dc2626'; // Red for over budget
                 document.querySelector('.progress-label').textContent = 'OVER BUDGET';
             } else {
                 progressFill.style.backgroundColor = 'var(--color-black)'; // Deep navy/black
-                document.querySelector('.progress-label').textContent = 'BUDGET USED';
+                document.querySelector('.progress-label').textContent = 'BUDGET UTILIZATION';
             }
 
             // Render expense chart (donut chart)
@@ -232,7 +232,7 @@
             renderCityBreakdown(cityTotals);
 
             // Generate trip insight
-            generateTripInsight(journey, totalEstimatedCost, budget, remainingBudget, categoryTotals);
+            generateTripInsight(journey, totalEstimatedCost, budget, availableFunds, categoryTotals);
         }
 
         function renderExpenseChart(categoryTotals) {
@@ -396,31 +396,31 @@
             });
         }
 
-        function generateTripInsight(journey, totalEstimatedCost, budget, remainingBudget, categoryTotals) {
+        function generateTripInsight(journey, totalEstimatedCost, budget, availableFunds, categoryTotals) {
             const insightText = document.getElementById('insight-text');
             if (!insightText) return;
 
             let insight = '';
 
             // If over budget
-            if (remainingBudget < 0) {
-                insight = `You are over budget by ₹${Math.abs(remainingBudget).toLocaleString()}. Consider reducing expenses in your highest spending categories.`;
+            if (availableFunds < 0) {
+                insight = `You are over budget by ₹${Math.abs(availableFunds).toLocaleString()}. Consider adjusting your plans to stay within budget.`;
             }
             // If under budget
-            else if (remainingBudget > 0) {
+            else if (availableFunds > 0) {
                 const days = journey.duration || 1;
-                const dailyRemaining = remainingBudget / days;
-                insight = `You have ₹${remainingBudget.toLocaleString()} remaining, giving you approximately ₹${dailyRemaining.toLocaleString()} per day for the remaining ${days} days.`;
+                const dailyAvailable = availableFunds / days;
+                insight = `You have ₹${availableFunds.toLocaleString()} available for your trip, which is approximately ₹${dailyAvailable.toLocaleString()} per day for the ${days} days of your journey.`;
             }
             // If exactly on budget
             else {
-                insight = "Your estimated expenses match your planned budget exactly.";
+                insight = "Your planned expenses perfectly match your budget.";
             }
 
             // Add category insight if we have data
             if (Object.keys(categoryTotals).length > 0) {
                 const topCategory = Object.entries(categoryTotals).reduce((a, b) => b[1] > a[1] ? b : a)[0];
-                insight += ` Your largest expense category is ${topCategory}.`;
+                insight += ` Your highest expense category is ${topCategory}.`;
             }
 
             insightText.textContent = insight;

@@ -56,23 +56,23 @@
                     <!-- Trip Overview -->
                     <div class="trip-overview">
                         <div class="overview-item">
-                            <span class="overview-label">DESTINATIONS</span>
+                            <span class="overview-label">Destinations</span>
                             <span class="overview-value" id="overview-destinations"></span>
                         </div>
                         <div class="overview-item">
-                            <span class="overview-label">DATES</span>
+                            <span class="overview-label">Dates</span>
                             <span class="overview-value" id="overview-dates"></span>
                         </div>
                         <div class="overview-item">
-                            <span class="overview-label">DURATION</span>
+                            <span class="overview-label">Duration</span>
                             <span class="overview-value" id="overview-duration"></span>
                         </div>
                         <div class="overview-item">
-                            <span class="overview-label">ESTIMATED COST</span>
+                            <span class="overview-label">Estimated Cost</span>
                             <span class="overview-value" id="overview-estimated-cost"></span>
                         </div>
                         <div class="overview-item">
-                            <span class="overview-label">BUDGET</span>
+                            <span class="overview-label">Budget</span>
                             <span class="overview-value" id="overview-budget"></span>
                         </div>
                     </div>
@@ -82,6 +82,11 @@
                         <!-- Day links will be inserted here -->
                     </nav>
 
+                    <!-- Schedule Conflict Notice -->
+                    <div class="schedule-conflict-notice" id="schedule-conflict-notice">
+                        <!-- Conflict notices will be inserted here -->
+                    </div>
+
                     <!-- Day-by-Day Itinerary -->
                     <div class="day-by-day-itinerary" id="day-by-day-itinerary">
                         <!-- Days will be inserted here -->
@@ -90,32 +95,32 @@
                     <!-- Trip Summary -->
                     <div class="trip-summary">
                         <div class="summary-item">
-                            <span class="summary-label">ESTIMATED COST</span>
+                            <span class="summary-label">Estimated Cost</span>
                             <span class="summary-value" id="summary-estimated-cost">₹0</span>
                         </div>
                         <div class="summary-item">
-                            <span class="summary-label">BUDGET</span>
+                            <span class="summary-label">Budget</span>
                             <span class="summary-value" id="summary-budget">₹80,000</span>
                         </div>
                         <div class="summary-item">
-                            <span class="summary-label">REMAINING</span>
+                            <span class="summary-label">Remaining</span>
                             <span class="summary-value" id="summary-remaining">₹80,000</span>
                         </div>
                         <div class="summary-item">
-                            <span class="summary-label">CITIES</span>
+                            <span class="summary-label">Cities</span>
                             <span class="summary-value" id="summary-cities">0</span>
                         </div>
                         <div class="summary-item">
-                            <span class="summary-label">ACTIVITIES</span>
+                            <span class="summary-label">Activities</span>
                             <span class="summary-value" id="summary-activities">0</span>
                         </div>
                     </div>
 
                     <!-- Optional Next Actions -->
                     <div class="next-actions">
-                        <a href="#" class="btn btn-outline" id="share-journey-btn">SHARE JOURNEY</a>
-                        <a href="#" class="btn btn-outline" id="budget-breakdown-btn">BUDGET BREAKDOWN</a>
-                        <a href="#" class="btn btn-outline" id="edit-journey-btn">EDIT JOURNEY</a>
+                        <a href="#" class="btn btn-primary" id="share-journey-btn">Share Journey</a>
+                        <a href="#" class="btn btn-outline" id="edit-journey-btn">Edit Journey</a>
+                        <a href="#" class="btn btn-outline" id="budget-breakdown-btn">Budget Breakdown</a>
                     </div>
                 </div>
             </section>
@@ -245,6 +250,9 @@
             // Generate day-by-day itinerary
             const itineraryContainer = document.getElementById('day-by-day-itinerary');
             itineraryContainer.innerHTML = generateDayByDayItinerary(journey);
+
+            // Check for schedule conflicts
+            checkScheduleConflicts(journey);
 
             // Set edit journey button to go back to builder
             const editBtn = document.getElementById('edit-journey-btn');
@@ -426,6 +434,81 @@
             });
 
             return timelineHTML;
+        }
+
+        function checkScheduleConflicts(journey) {
+            // Remove any existing conflict warnings
+            const existingWarnings = document.querySelectorAll('.schedule-conflict');
+            existingWarnings.forEach(warning => warning.remove());
+
+            if (!journey.stops) return;
+
+            // Check each stop for time conflicts
+            journey.stops.forEach((stop, stopIndex) => {
+                const dayActivitiesMap = {};
+
+                // Group activities by date
+                stop.activities.forEach(activity => {
+                    const dateKey = activity.date;
+                    if (!dayActivitiesMap[dateKey]) {
+                        dayActivitiesMap[dateKey] = [];
+                    }
+                    dayActivitiesMap[dateKey].push(activity);
+                });
+
+                // Check each day for overlaps
+                Object.keys(dayActivitiesMap).forEach(dateKey => {
+                    const activities = dayActivitiesMap[dateKey];
+
+                    // Sort by start time
+                    activities.sort((a, b) => {
+                        const timeA = new Date(`1970-01-01T${a.startTime}:00`).getTime();
+                        const timeB = new Date(`1970-01-01T${b.startTime}:00`).getTime();
+                        return timeA - timeB;
+                    });
+
+                    // Check for overlaps
+                    for (let i = 0; i < activities.length - 1; i++) {
+                        const currentActivity = activities[i];
+                        const nextActivity = activities[i + 1];
+
+                        const currentEnd = new Date(`1970-01-01T${currentActivity.endTime}:00`).getTime();
+                        const nextStart = new Date(`1970-01-01T${nextActivity.startTime}:00`).getTime();
+
+                        if (currentEnd > nextStart) {
+                            // Conflict detected
+                            showScheduleConflict(currentActivity, nextActivity, stop.city, dateKey, stopIndex);
+                        }
+                    }
+                });
+            });
+        }
+
+        function showScheduleConflict(activity1, activity2, city, date, stopIndex) {
+            const conflictDiv = document.createElement('div');
+            conflictDiv.className = 'schedule-conflict';
+            conflictDiv.innerHTML = `
+                <div class="conflict-content">
+                    <h4>Schedule Conflict</h4>
+                    <p><strong>${activity1.name}</strong></p>
+                    <p class="conflict-time">${activity1.startTime} — ${activity1.endTime}</p>
+
+                    <div class="conflict-divider"></div>
+
+                    <p><strong>${activity2.name}</strong></p>
+                    <p class="conflict-time">${activity2.startTime} — ${activity2.endTime}</p>
+
+                    <p class="conflict-message">These activities overlap in ${city} on ${formatDate(new Date(date))}.</p>
+
+                    <button class="btn btn-outline btn-sm conflict-button">
+                        Review Schedule
+                    </button>
+                </div>
+            `;
+
+            // Insert the conflict notice at the beginning of the itinerary content
+            const itineraryContainer = document.getElementById('day-by-day-itinerary');
+            itineraryContainer.insertBefore(conflictDiv, itineraryContainer.firstChild);
         }
     </script>
 </body>

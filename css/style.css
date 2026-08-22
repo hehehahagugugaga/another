@@ -1767,3 +1767,195 @@ textarea {
         margin-bottom: 0;
     }
 }
+
+/* Schedule Conflict Styles */
+.schedule-conflict {
+    background-color: var(--color-off-white);
+    border-left: 4px solid #dc2626; /* Red accent */
+    padding: var(--space-4);
+    margin-bottom: var(--space-6);
+    border-radius: var(--radius-md);
+}
+
+.conflict-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.conflict-content h4 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-black);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.conflict-content h4::before {
+    content: "⚠";
+    font-size: var(--font-size-xl);
+}
+
+.conflict-time {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-gray);
+    margin: 0;
+}
+
+.conflict-divider {
+    height: 1px;
+    background-color: var(--color-gray-light);
+    margin: var(--space-2) 0;
+}
+
+.conflict-message {
+    font-size: var(--font-size-base);
+    color: var(--color-gray);
+    line-height: 1.6;
+}
+
+.conflict-button {
+    align-self: flex-start;
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border: 1px solid var(--color-gray-light);
+    color: var(--color-gray);
+    border-radius: var(--radius-none);
+    transition: all var(--transition-base);
+}
+
+.conflict-button:hover {
+    border-color: var(--color-gray);
+    color: var(--color-black);
+    background-color: var(--color-off-white);
+}
+
+/* Itinerary View Specific Styles */
+.city-divider {
+    padding: var(--space-6) 0;
+    text-align: center;
+}
+
+.city-divider p {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--color-gray);
+}
+
+.city-section {
+    margin-bottom: var(--space-6);
+}
+
+.city-name {
+    font-size: var(--font-size-heading-lg);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: -0.5px;
+    color: var(--color-black);
+    margin: 0 0 var(--space-1) 0;
+}
+
+.country-name {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-light);
+    color: var(--color-gray);
+    margin: 0;
+}
+
+.day-section {
+    border-left: 2px solid var(--color-gray-light);
+    padding-left: var(--space-4);
+    margin-top: var(--space-6);
+}
+
+.day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-2);
+    padding-bottom: var(--space-1);
+    border-bottom: 1px solid var(--color-gray-light);
+}
+
+.day-label {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--color-black);
+}
+
+.day-date {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-gray);
+}
+
+.activities-timeline,
+.day-timeline {
+    padding: var(--space-3) 0;
+}
+
+.time-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-gray-light);
+}
+
+.time-label {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.5px;
+    color: var(--color-black);
+    min-width: 80px;
+    text-align: center;
+}
+
+.activity-info {
+    flex: 1;
+    margin-left: var(--space-3);
+}
+
+.activity-name {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: -0.25px;
+    margin-bottom: var(--space-0-5);
+    color: var(--color-black);
+}
+
+.activity-category {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-light);
+    color: var(--color-gray);
+    margin-bottom: var(--space-1);
+}
+
+.activity-cost {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-black);
+}
+
+.activity-description {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-light);
+    color: var(--color-gray);
+    line-height: 1.6;
+}
+
+.timeline-separator {
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--color-gray-light), transparent);
+    margin: var(--space-4) 0;
+}
