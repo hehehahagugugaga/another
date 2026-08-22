@@ -21,6 +21,7 @@
                 </ul>
             </nav>
             <div class="user-actions">
+                <a href="create-journey.html" class="btn btn-primary">Create Journey</a>
                 <button class="btn btn-outline">Profile</button>
             </div>
         </div>
@@ -30,6 +31,15 @@
         <div class="container">
             <!-- Itinerary Builder -->
             <section class="itinerary-builder">
+                <!-- Editorial Intro -->
+                <div class="itinerary-editorial">
+                    <span class="itinerary-label">YOUR ITINERARY</span>
+                    <h1 class="itinerary-heading">Build your perfect journey</h1>
+                    <p class="itinerary-subtext">
+                        Craft each day with purpose. Add cities, activities, and moments that matter.
+                    </p>
+                </div>
+
                 <!-- Journey Header -->
                 <div class="journey-header">
                     <div class="journey-info">
@@ -119,7 +129,7 @@
                 { name: "Tokyo Tower", category: "Sightseeing", estimatedCost: 1200, duration: 2 },
                 { name: "Senso-ji Temple", category: "Sightseeing", estimatedCost: 0, duration: 2 },
                 { name: "Shibuya Crossing", category: "Sightseeing", estimatedCost: 0, duration: 1.5 },
-                { name: "Meiji Shrine", category: "Sightseeing", estimatedCost: 0, duration: 1.5 },
+                { name: "Meiji Shrine", category: "Sightseeing", estimatedCost: 0, duration: 2 },
                 { name: "Tsukiji Fish Market", category: "Food", estimatedCost: 800, duration: 2 },
                 { name: "Harajuku Takeshita Street", category: "Shopping", estimatedCost: 0, duration: 2 },
                 { name: "Shinjuku Gyoen National Garden", category: "Sightseeing", estimatedCost: 500, duration: 2 },
@@ -295,10 +305,11 @@
             }
 
             // Render each stop
-            journey.stops.forEach((stop, stopIndex) => {
-                const stopElement = createStopElement(stop, stopIndex, journey);
+            for (let i = 0; i < journey.stops.length; i++) {
+                const stop = journey.stops[i];
+                const stopElement = createStopElement(stop, i, journey);
                 container.appendChild(stopElement);
-            });
+            }
         }
 
         function createStopElement(stop, stopIndex, journey) {
@@ -312,7 +323,7 @@
             stopDiv.innerHTML = `
                 <div class="stop-header">
                     <h2 class="stop-city">${stop.city}</h2>
-                    ${stop.country ? `<p class="stop-country">${stop.country}</p>` : ''}
+                    ${stop.country ? '<p class="stop-country">' + stop.country + '</p>' : ''}
                     <div class="stop-dates">
                         <span>${formatDate(startDate)} — ${formatDate(endDate)}</span>
                         <span class="stop-duration">${Math.ceil((endDate - startDate) / (1000 * 3600 * 24)) + 1} DAYS</span>
@@ -356,24 +367,19 @@
                     return activityDate.toDateString() === currentDate.toDateString();
                 });
 
-                daysHTML += `
-                    <div class="day-section">
-                        <div class="day-header">
-                            <span class="day-label">DAY ${String(dayNumber).padStart(2, '0')}</span>
-                            <span class="day-date">${dayDate}</span>
-                        </div>
+                daysHTML +=
+                    '<div class="day-section">' +
+                        '<div class="day-header">' +
+                            '<span class="day-label">DAY ' + String(dayNumber).padStart(2, '0') + '</span>' +
+                            '<span class="day-date">' + dayDate + '</span>' +
+                        '</div>' +
 
-                        <div class="activities-timeline">
-                            ${renderActivitiesForDay(dayActivities, stop.id)}
+                        '<div class="activities-timeline">' +
+                            renderActivitiesForDay(dayActivities, stop.id) +
 
-                            ${dayActivities.length > 0 ? '' : `
-                                <div class="empty-day">
-                                    <p>No activities planned for this day yet.</p>
-                                </div>
-                            `}
-                        </div>
-                    </div>
-                `;
+                            (dayActivities.length > 0 ? '' : '<div class="empty-day"><p>No activities planned for this day yet.</p></div>') +
+                        '</div>' +
+                    '</div>';
             }
 
             return daysHTML;
@@ -399,19 +405,19 @@
                             <h3 class="activity-name">${activity.name}</h3>
                             <p class="activity-category">${activity.category}</p>
                             ${activity.estimatedCost > 0 ?
-                                `<p class="activity-cost">₹${activity.estimatedCost.toLocaleString()}</p>` :
-                                `<p class="activity-cost">FREE</p>`}
+                                '<p class="activity-cost">₹' + activity.estimatedCost.toLocaleString() + '</p>' :
+                                '<p class="activity-cost">FREE</p>'}
                         </div>
                         <div class="activity-actions">
-                            <button class="btn btn-outline btn-xs" onclick="editActivity('${activity.id}')">
+                            <button class="btn btn-outline btn-xs" onclick="editActivity('" + activity.id + "')">
                                 EDIT
                             </button>
-                            <button class="btn btn-outline btn-xs ml-1" onclick="deleteActivity('${activity.id}', '${stopId}')">
+                            <button class="btn btn-outline btn-xs ml-1" onclick="deleteActivity('" + activity.id + "', '" + stopId + "')">
                                 DELETE
                             </button>
                         </div>
                     </div>
-                `;
+                `);
             });
 
             return activitiesHTML;
@@ -673,9 +679,9 @@
 
             return activities.map(activity => {
                 const costText = activity.estimatedCost > 0 ?
-                    ` (₹${activity.estimatedCost.toLocaleString()})` :
+                    ' (₹' + activity.estimatedCost.toLocaleString() + ')' :
                     ' (FREE)';
-                return `<option value="${activity.name}">${activity.name}${costText}</option>`;
+                return '<option value="' + activity.name + '">' + activity.name + costText + '</option>';
             }).join('');
         }
 
@@ -870,7 +876,7 @@
                 const startDate = new Date(journey.startDate);
                 const endDate = new Date(journey.endDate);
                 const duration = Math.ceil((endDate - startDate) / (1000 * 3600 * 24)) + 1;
-                journeyLengthEl.textContent = `${duration} DAYS`;
+                journeyLengthEl.textContent = (duration + ' DAYS');
             }
 
             // Update journey country/code (derived from first destination or hardcoded for now)

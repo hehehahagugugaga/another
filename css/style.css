@@ -1526,6 +1526,114 @@ textarea {
     color: var(--color-gray);
 }
 
+/* Chart Editorial */
+.chart-editorial {
+    text-align: center;
+    margin-bottom: var(--space-6);
+}
+
+.chart-label {
+    display: inline-block;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--color-gray);
+    margin-bottom: var(--space-2);
+}
+
+.chart-heading {
+    font-size: var(--font-size-heading);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: -0.5px;
+    margin-bottom: var(--space-2);
+    color: var(--color-black);
+    max-width: 28rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.chart-subtext {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-light);
+    line-height: 1.8;
+    max-width: 28rem;
+    margin: 0 auto var(--space-4);
+    color: var(--color-gray);
+}
+
+/* Category Editorial */
+.category-editorial {
+    text-align: center;
+    margin-bottom: var(--space-4);
+}
+
+.category-label {
+    display: inline-block;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--color-gray);
+    margin-bottom: var(--space-1);
+}
+
+.category-heading {
+    font-size: var(--font-size-heading);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: -0.5px;
+    margin-bottom: var(--space-1);
+    color: var(--color-black);
+    max-width: 24rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.category-subtext {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-light);
+    line-height: 1.6;
+    max-width: 24rem;
+    margin: 0 auto var(--space-3);
+    color: var(--color-gray);
+}
+
+/* Insight Editorial */
+.insight-editorial {
+    text-align: center;
+    margin-bottom: var(--space-4);
+}
+
+.insight-label {
+    display: inline-block;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--color-gray);
+    margin-bottom: var(--space-1);
+}
+
+.insight-heading {
+    font-size: var(--font-size-heading);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: -0.5px;
+    margin-bottom: var(--space-1);
+    color: var(--color-black);
+    max-width: 24rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.insight-subtext {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-light);
+    line-height: 1.6;
+    max-width: 24rem;
+    margin: 0 auto var(--space-3);
+    color: var(--color-gray);
+}
+
 .budget-overview {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

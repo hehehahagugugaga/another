@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Itinerary View - GlobeTrotter</title>
+    <title>Public Journey - GlobeTrotter</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -29,11 +29,11 @@
 
     <main class="site-main">
         <div class="container">
-            <!-- Itinerary View -->
-            <section class="itinerary-view" id="itinerary-view">
+            <!-- Public Journey -->
+            <section class="public-journey">
                 <!-- Loading state -->
                 <div class="loading-state">
-                    <p>Loading your journey...</p>
+                    <p>Loading journey...</p>
                 </div>
 
                 <!-- Error state -->
@@ -44,6 +44,13 @@
 
                 <!-- Journey content -->
                 <div class="journey-content">
+                    <!-- Editorial Intro -->
+                    <div class="journey-editorial">
+                        <span class="journey-label">PUBLIC JOURNEY</span>
+                        <h1 class="journey-heading">A journey worth sharing</h1>
+                        <p class="journey-subtext">Experience the journey through the eyes of the traveler.</p>
+                    </div>
+
                     <!-- Journey Hero -->
                     <div class="journey-hero">
                         <img src="" alt="" class="journey-hero-image" id="journey-hero-image">
@@ -72,20 +79,12 @@
                             <span class="overview-label">Estimated Cost</span>
                             <span class="overview-value" id="overview-estimated-cost"></span>
                         </div>
-                        <div class="overview-item">
-                            <span class="overview-label">Budget</span>
-                            <span class="overview-value" id="overview-budget"></span>
-                        </div>
                     </div>
 
-                    <!-- Day Navigation (optional) -->
-                    <nav class="day-navigation" id="day-navigation">
-                        <!-- Day links will be inserted here -->
-                    </nav>
-
-                    <!-- Schedule Conflict Notice -->
-                    <div class="schedule-conflict-notice" id="schedule-conflict-notice">
-                        <!-- Conflict notices will be inserted here -->
+                    <!-- Journey Details -->
+                    <div class="journey-details">
+                        <h2 class="section-heading">Journey Details</h2>
+                        <div class="journey-description" id="journey-description"></div>
                     </div>
 
                     <!-- Day-by-Day Itinerary -->
@@ -93,35 +92,14 @@
                         <!-- Days will be inserted here -->
                     </div>
 
-                    <!-- Trip Summary -->
-                    <div class="trip-summary">
-                        <div class="summary-item">
-                            <span class="summary-label">Estimated Cost</span>
-                            <span class="summary-value" id="summary-estimated-cost">₹0</span>
-                        </div>
-                        <div class="summary-item">
-                            <span class="summary-label">Budget</span>
-                            <span class="summary-value" id="summary-budget">₹80,000</span>
-                        </div>
-                        <div class="summary-item">
-                            <span class="summary-label">Remaining</span>
-                            <span class="summary-value" id="summary-remaining">₹80,000</span>
-                        </div>
-                        <div class="summary-item">
-                            <span class="summary-label">Cities</span>
-                            <span class="summary-value" id="summary-cities">0</span>
-                        </div>
-                        <div class="summary-item">
-                            <span class="summary-label">Activities</span>
-                            <span class="summary-value" id="summary-activities">0</span>
-                        </div>
+                    <!-- Schedule Conflict Notice -->
+                    <div class="schedule-conflict-notice" id="schedule-conflict-notice">
+                        <!-- Conflict notices will be inserted here -->
                     </div>
 
-                    <!-- Optional Next Actions -->
-                    <div class="next-actions">
-                        <a href="#" class="btn btn-primary" id="share-journey-btn">Share Journey</a>
-                        <a href="#" class="btn btn-outline" id="edit-journey-btn">Edit Journey</a>
-                        <a href="#" class="btn btn-outline" id="budget-breakdown-btn">Budget Breakdown</a>
+                    <!-- Call to Action -->
+                    <div class="journey-cta">
+                        <a href="index.html" class="btn btn-outline">Explore More Journeys</a>
                     </div>
                 </div>
             </section>
@@ -164,8 +142,8 @@
             document.querySelector('.error-state').style.display = 'none';
             document.querySelector('.journey-content').style.display = 'block';
 
-            // Populate the journey view
-            populateJourneyView(journey);
+            // Populate the public journey view
+            populatePublicJourney(journey);
         });
 
         function showError() {
@@ -174,7 +152,7 @@
             document.querySelector('.journey-content').style.display = 'none';
         }
 
-        function populateJourneyView(journey) {
+        function populatePublicJourney(journey) {
             // Set journey hero
             const heroImage = document.getElementById('journey-hero-image');
             const heroTitle = document.getElementById('journey-hero-title');
@@ -227,26 +205,12 @@
             }
 
             document.getElementById('overview-estimated-cost').textContent = `₹${totalEstimatedCost.toLocaleString()}`;
-            document.getElementById('overview-budget').textContent = `₹${journey.budget.toLocaleString()}`;
 
-            // Set trip summary (same as overview but with remaining)
-            const remainingBudget = journey.budget - totalEstimatedCost;
-            document.getElementById('summary-estimated-cost').textContent = `₹${totalEstimatedCost.toLocaleString()}`;
-            document.getElementById('summary-budget').textContent = `₹${journey.budget.toLocaleString()}`;
-            document.getElementById('summary-remaining').textContent = `₹${Math.max(0, remainingBudget).toLocaleString()}`;
-            if (remainingBudget < 0) {
-                document.getElementById('summary-remaining').textContent = `-₹${Math.abs(remainingBudget).toLocaleString()}`;
-                document.getElementById('summary-remaining').classList.add('over-budget');
+            // Set journey description
+            const descriptionEl = document.getElementById('journey-description');
+            if (descriptionEl) {
+                descriptionEl.textContent = journey.description || "No description available.";
             }
-            document.getElementById('summary-cities').textContent = totalCities;
-            document.getElementById('summary-activities').textContent = totalActivities;
-
-            // Generate day navigation (if there are many days)
-            const dayNav = document.getElementById('day-navigation');
-            // We'll generate day navigation only if there are more than 3 days
-            // For simplicity, we'll skip day navigation in this version and just show the itinerary scrolling.
-            // If we want to add it, we can uncomment and implement.
-            // dayNav.innerHTML = generateDayNavigation(journey);
 
             // Generate day-by-day itinerary
             const itineraryContainer = document.getElementById('day-by-day-itinerary');
@@ -254,30 +218,6 @@
 
             // Check for schedule conflicts
             checkScheduleConflicts(journey);
-
-            // Set edit journey button to go back to builder
-            const editBtn = document.getElementById('edit-journey-btn');
-            if (editBtn) {
-                editBtn.href = `itinerary-builder.html?id=${journey.id}`;
-            }
-
-            // Set share journey button
-            const shareBtn = document.getElementById('share-journey-btn');
-            if (shareBtn) {
-                shareBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    window.location.href = `public-journey.html?id=${journey.id}`;
-                });
-            }
-
-            // Set budget breakdown button
-            const budgetBtn = document.getElementById('budget-breakdown-btn');
-            if (budgetBtn) {
-                budgetBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    window.location.href = `budget-breakdown.html?id=${journey.id}`;
-                });
-            }
         }
 
         function getCityImageUrl(city) {
@@ -308,32 +248,6 @@
                 day: 'numeric',
                 year: 'numeric'
             }).format(date).replace(/\s\d{4}$/, ''); // Remove year if same year
-        }
-
-        function generateDayNavigation(journey) {
-            if (!journey.stops || journey.stops.length === 0) return '';
-
-            let navHTML = '';
-            let dayCounter = 1;
-
-            journey.stops.forEach((stop, stopIndex) => {
-                const startDate = new Date(stop.startDate);
-                const endDate = new Date(stop.endDate);
-                const daysDiff = Math.ceil((endDate - startDate) / (1000 * 3600 * 24)) + 1;
-
-                for (let day = 0; day < daysDiff; day++) {
-                    const currentDate = new Date(startDate);
-                    currentDate.setDate(currentDate.getDate() + day);
-                    const dayDate = formatDate(currentDate);
-
-                    navHTML += `<button class="day-nav-btn" data-day="${dayCounter}" data-stop-index="${stopIndex}" data-day-offset="${day}">
-                        DAY ${String(dayCounter).padStart(2, '0')}<br><small>${dayDate}</small>
-                    </button>`;
-                    dayCounter++;
-                }
-            });
-
-            return navHTML;
         }
 
         function generateDayByDayItinerary(journey) {
@@ -486,6 +400,9 @@
         }
 
         function showScheduleConflict(activity1, activity2, city, date, stopIndex) {
+            const itineraryContainer = document.getElementById('day-by-day-itinerary');
+            if (!itineraryContainer) return;
+
             const conflictDiv = document.createElement('div');
             conflictDiv.className = 'schedule-conflict';
             conflictDiv.innerHTML = `
@@ -508,7 +425,6 @@
             `;
 
             // Insert the conflict notice at the beginning of the itinerary content
-            const itineraryContainer = document.getElementById('day-by-day-itinerary');
             itineraryContainer.insertBefore(conflictDiv, itineraryContainer.firstChild);
         }
     </script>

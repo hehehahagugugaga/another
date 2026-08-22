@@ -21,6 +21,7 @@
                 </ul>
             </nav>
             <div class="user-actions">
+                <a href="create-journey.html" class="btn btn-primary">Create Journey</a>
                 <button class="btn btn-outline">Profile</button>
             </div>
         </div>
@@ -46,69 +47,67 @@
                     <!-- Editorial Intro -->
                     <div class="budget-editorial">
                         <span class="budget-label">BUDGET BREAKDOWN</span>
-                        <h1 class="budget-heading">Understanding Your Travel Investment</h1>
-                        <p class="budget-subtext">
-                            A detailed analysis of your planned expenses.
-                        </p>
+                        <h1 class="budget-heading">Where your budget goes.</h1>
+                        <p class="budget-subtext">See how every choice shapes your journey. Track expenses, adjust plans, and travel with confidence.</p>
                     </div>
 
                     <!-- Budget Overview -->
                     <div class="budget-overview">
-                        <div class="budget-item">
-                            <span class="budget-label">TOTAL BUDGET</span>
-                            <span class="budget-value" id="total-budget">₹80,000</span>
-                        </div>
-                        <div class="budget-item">
-                            <span class="budget-label">PLANNED EXPENSES</span>
-                            <span class="budget-value" id="planned-expenses">₹0</span>
-                        </div>
-                        <div class="budget-item">
-                            <span class="budget-label">AVAILABLE FUNDS</span>
-                            <span class="budget-value" id="available-funds">₹80,000</span>
+                        <h2 class="section-heading">BUDGET OVERVIEW</h2>
+                        <div class="budget-grid">
+                            <div class="budget-item">
+                                <span class="budget-label">PLANNED</span>
+                                <span class="budget-value" id="total-budget">₹80,000</span>
+                            </div>
+                            <div class="budget-item">
+                                <span class="budget-label">ESTIMATED</span>
+                                <span class="budget-value" id="planned-expenses">₹0</span>
+                            </div>
+                            <div class="budget-item">
+                                <span class="budget-label">REMAINING</span>
+                                <span class="budget-value" id="available-funds">₹80,000</span>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Budget Progress -->
                     <div class="budget-progress">
-                        <div class="progress-label">BUDGET UTILIZATION</div>
+                        <div class="progress-label">0% of budget used</div>
                         <div class="progress-bar">
                             <div class="progress-fill" id="progress-fill"></div>
                         </div>
-                        <span class="progress-percentage" id="progress-percentage">0%</span>
                     </div>
 
                     <!-- Chart Container -->
-                    <div class="chart-container">
-                        <div class="chart-title">EXPENSE BREAKDOWN BY CATEGORY</div>
-                        <div class="chart" id="expense-chart"></div>
+                    <div class="chart-editorial">
+                        <span class="chart-label">EXPENSE BREAKDOWN</span>
+                        <h2 class="chart-heading">See how your money moves</h2>
+                        <p class="chart-subtext">Visualize your spending patterns across different categories.</p>
                     </div>
+                    <div class="chart" id="expense-chart"></div>
 
                     <!-- Category Breakdown -->
-                    <div class="category-breakdown">
-                        <h2 class="section-heading">CATEGORY BREAKDOWN</h2>
-                        <div class="category-list" id="category-list">
-                            <!-- Category items will be inserted here -->
-                        </div>
+                    <div class="category-editorial">
+                        <span class="category-label">CATEGORY BREAKDOWN</span>
+                        <h2 class="category-heading">Where your budget goes</h2>
+                        <p class="category-subtext">Understand your spending by activity type.</p>
+                    </div>
+                    <div class="category-list" id="category-list">
+                        <!-- Category items will be inserted here -->
                     </div>
 
-                    <!-- City Breakdown (optional) -->
-                    <div class="city-breakdown">
-                        <h2 class="section-heading">DESTINATION BREAKDOWN</h2>
-                        <div class="category-list" id="city-list">
-                            <!-- City items will be inserted here -->
-                        </div>
-                    </div>
-
+                    
                     <!-- Trip Insight -->
-                    <div class="trip-insight">
-                        <h2 class="section-heading">TRAVEL INSIGHTS</h2>
-                        <p class="insight-text" id="insight-text"></p>
+                    <div class="insight-editorial">
+                        <span class="insight-label">TRAVEL INSIGHTS</span>
+                        <h2 class="insight-heading">Smart tips for your journey</h2>
+                        <p class="insight-subtext">Personalized recommendations based on your plans.</p>
                     </div>
+                    <p class="insight-text" id="insight-text"></p>
 
                     <!-- Navigation -->
                     <div class="budget-nav">
                         <a href="itinerary-view.html" class="btn btn-outline" id="back-to-itinerary">← BACK TO ITINERARY</a>
-                        <a href="itinerary-builder.html" class="btn btn-primary" id="edit-itinerary">EDIT ITINERARY</a>
                     </div>
                 </div>
             </section>
@@ -163,31 +162,23 @@
 
         function populateBudgetBreakdown(journey) {
             // Set journey ID for navigation links
-            document.getElementById('back-to-itinerary').href = `itinerary-view.html?id=${journey.id}`;
-            document.getElementById('edit-itinerary').href = `itinerary-builder.html?id=${journey.id}`;
+            document.getElementById('back-to-itinerary').href = 'itinerary-view.html?id=' + journey.id;
 
             // Calculate totals from activities
             let totalEstimatedCost = 0;
             const categoryTotals = {};
-            const cityTotals = {};
 
             if (journey.stops && journey.stops.length > 0) {
                 journey.stops.forEach(stop => {
-                    let cityTotal = 0;
                     if (stop.activities && stop.activities.length > 0) {
                         stop.activities.forEach(activity => {
                             const cost = activity.estimatedCost || 0;
                             totalEstimatedCost += cost;
-                            cityTotal += cost;
 
                             // Category totals
                             const category = activity.category || 'Other';
                             categoryTotals[category] = (categoryTotals[category] || 0) + cost;
                         });
-                    }
-                    // City totals
-                    if (stop.city) {
-                        cityTotals[stop.city] = (cityTotals[stop.city] || 0) + cityTotal;
                     }
                 });
             }
@@ -197,29 +188,27 @@
             const budgetUtilizationPercentage = budget > 0 ? (totalEstimatedCost / budget) * 100 : 0;
 
             // Update budget overview
-            document.getElementById('total-budget').textContent = `₹${budget.toLocaleString()}`;
-            document.getElementById('planned-expenses').textContent = `₹${totalEstimatedCost.toLocaleString()}`;
+            document.getElementById('total-budget').textContent = '₹' + budget.toLocaleString();
+            document.getElementById('planned-expenses').textContent = '₹' + totalEstimatedCost.toLocaleString();
             const availableFundsEl = document.getElementById('available-funds');
             if (availableFunds < 0) {
-                availableFundsEl.textContent = `-₹${Math.abs(availableFunds).toLocaleString()}`;
+                availableFundsEl.textContent = '-₹' + Math.abs(availableFunds).toLocaleString();
                 availableFundsEl.classList.add('over-budget');
             } else {
-                availableFundsEl.textContent = `₹${availableFunds.toLocaleString()}`;
+                availableFundsEl.textContent = '₹' + availableFunds.toLocaleString();
                 availableFundsEl.classList.remove('over-budget');
             }
 
             // Update budget progress
             const progressFill = document.getElementById('progress-fill');
-            const progressPercentage = document.getElementById('progress-percentage');
-            progressFill.style.width = `${budgetUtilizationPercentage}%`;
-            progressPercentage.textContent = `${Math.round(budgetUtilizationPercentage)}%`;
+            const progressLabel = document.querySelector('.progress-label');
+            progressFill.style.width = budgetUtilizationPercentage + '%';
+            progressLabel.textContent = Math.round(budgetUtilizationPercentage) + '% of budget used';
 
             if (budgetUtilizationPercentage >= 100) {
                 progressFill.style.backgroundColor = '#dc2626'; // Red for over budget
-                document.querySelector('.progress-label').textContent = 'OVER BUDGET';
             } else {
                 progressFill.style.backgroundColor = 'var(--color-black)'; // Deep navy/black
-                document.querySelector('.progress-label').textContent = 'BUDGET UTILIZATION';
             }
 
             // Render expense chart (donut chart)
@@ -227,9 +216,6 @@
 
             // Render category breakdown
             renderCategoryBreakdown(categoryTotals, totalEstimatedCost);
-
-            // Render city breakdown
-            renderCityBreakdown(cityTotals);
 
             // Generate trip insight
             generateTripInsight(journey, totalEstimatedCost, budget, availableFunds, categoryTotals);
@@ -261,7 +247,7 @@
             const svg = document.createElementNS(svgNS, "svg");
             svg.setAttribute("width", width);
             svg.setAttribute("height", height);
-            svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+            svg.setAttribute("viewBox", "0 0 " + width + " " + height);
             svg.classList.add("donut-chart");
 
             let cumulativePercent = 0;
@@ -324,7 +310,7 @@
             totalText.setAttribute("fill", "var(--color-black)");
             totalText.setAttribute("font-weight", "bold");
             totalText.setAttribute("font-size", "16");
-            totalText.textContent = `₹${total.toLocaleString()}`;
+            totalText.textContent = "₹" + total.toLocaleString();
             svg.appendChild(totalText);
 
             const totalLabel = document.createElementNS(svgNS, "text");
@@ -359,43 +345,16 @@
 
                 const categoryItem = document.createElement('div');
                 categoryItem.className = 'category-item';
-                categoryItem.innerHTML = `
-                    <div class="category-name">${category}</div>
-                    <div class="category-value">₹${value.toLocaleString()}</div>
-                    <div class="category-percent">${percent.toFixed(1)}%</div>
-                `;
+                categoryItem.innerHTML =
+                    '<div class="category-name">' + category + '</div>' +
+                    '<div class="category-value">₹' + value.toLocaleString() + '</div>' +
+                    '<div class="category-percent">' + percent.toFixed(1) + '%</div>';
 
                 categoryList.appendChild(categoryItem);
             });
         }
 
-        function renderCityBreakdown(cityTotals) {
-            const cityList = document.getElementById('city-list');
-            if (!cityList) return;
-
-            // Clear container
-            cityList.innerHTML = '';
-
-            if (Object.keys(cityTotals).length === 0) {
-                cityList.innerHTML = '<p class="text-center py-8">No city data available.</p>';
-                return;
-            }
-
-            // Sort cities by value descending
-            const sortedCities = Object.entries(cityTotals).sort((a, b) => b[1] - a[1]);
-
-            sortedCities.forEach(([city, value]) => {
-                const cityItem = document.createElement('div');
-                cityItem.className = 'city-item';
-                cityItem.innerHTML = `
-                    <div class="city-name">${city}</div>
-                    <div class="city-value">₹${value.toLocaleString()}</div>
-                `;
-
-                cityList.appendChild(cityItem);
-            });
-        }
-
+        
         function generateTripInsight(journey, totalEstimatedCost, budget, availableFunds, categoryTotals) {
             const insightText = document.getElementById('insight-text');
             if (!insightText) return;
@@ -404,13 +363,13 @@
 
             // If over budget
             if (availableFunds < 0) {
-                insight = `You are over budget by ₹${Math.abs(availableFunds).toLocaleString()}. Consider adjusting your plans to stay within budget.`;
+                insight = 'You are over budget by ₹' + Math.abs(availableFunds).toLocaleString() + '. Consider adjusting your plans to stay within budget.';
             }
             // If under budget
             else if (availableFunds > 0) {
                 const days = journey.duration || 1;
                 const dailyAvailable = availableFunds / days;
-                insight = `You have ₹${availableFunds.toLocaleString()} available for your trip, which is approximately ₹${dailyAvailable.toLocaleString()} per day for the ${days} days of your journey.`;
+                insight = 'You have ₹' + availableFunds.toLocaleString() + ' available for your trip, which is approximately ₹' + dailyAvailable.toLocaleString() + ' per day for the ' + days + ' days of your journey.';
             }
             // If exactly on budget
             else {
@@ -420,7 +379,7 @@
             // Add category insight if we have data
             if (Object.keys(categoryTotals).length > 0) {
                 const topCategory = Object.entries(categoryTotals).reduce((a, b) => b[1] > a[1] ? b : a)[0];
-                insight += ` Your highest expense category is ${topCategory}.`;
+                insight += ' Your highest expense category is ' + topCategory + '.';
             }
 
             insightText.textContent = insight;
