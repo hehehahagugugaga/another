@@ -320,6 +320,14 @@
             const startDate = new Date(stop.startDate);
             const endDate = new Date(stop.endDate);
 
+            // Calculate estimated cost for this stop
+            let stopEstimatedCost = 0;
+            if (stop.activities && stop.activities.length > 0) {
+                stop.activities.forEach(activity => {
+                    stopEstimatedCost += activity.estimatedCost || 0;
+                });
+            }
+
             stopDiv.innerHTML = `
                 <div class="stop-header">
                     <h2 class="stop-city">${stop.city}</h2>
@@ -327,6 +335,10 @@
                     <div class="stop-dates">
                         <span>${formatDate(startDate)} — ${formatDate(endDate)}</span>
                         <span class="stop-duration">${Math.ceil((endDate - startDate) / (1000 * 3600 * 24)) + 1} DAYS</span>
+                    </div>
+                    <div class="stop-budget">
+                        <span class="stop-budget-label">ESTIMATED COST</span>
+                        <span class="stop-budget-value">₹${stopEstimatedCost.toLocaleString()}</span>
                     </div>
                 </div>
 
